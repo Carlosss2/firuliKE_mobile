@@ -17,7 +17,7 @@ class LoginPage extends StatelessWidget {
           children: [
             const LoginHeader(),
             Transform.translate(
-              offset: const Offset(0, -30), // Truco visual para montar el panel blanco sobre el verde
+              offset: const Offset(0, -30), 
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,

@@ -61,7 +61,7 @@ class CustomHeader extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               
-              // Botón Añadir (+) adaptado a M3
+              // Botón 
               IconButton.filledTonal(
                 onPressed: onAddPressed,
                 style: IconButton.styleFrom(

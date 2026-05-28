@@ -17,12 +17,12 @@ class PetModel extends PetEntity {
       name: json['nombre'] as String? ?? 'Sin nombre',
       breed: json['raza'] as String?,
       
-      // 🛡️ Mapeo seguro para la edad por si acaso el backend la manda como String
+      //
       age: json['edad'] is String 
           ? int.tryParse(json['edad'] as String) 
           : json['edad'] as int?,
 
-      // 🛡️ SOLUCIÓN AL ERROR: Convierte a String y parsea de forma segura a double
+      // 
       peso: json['peso'] != null 
           ? double.tryParse(json['peso'].toString()) 
           : null,
