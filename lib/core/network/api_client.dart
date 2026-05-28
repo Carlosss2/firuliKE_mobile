@@ -32,22 +32,29 @@ class ApiClient {
     await prefs.remove(_tokenKey);
   }
 
+  Future<Map<String, String>> _buildHeaders({Map<String, String>? headers}) async {
+    final activeHeaders = Map<String, String>.from(
+      headers ?? {'Content-Type': 'application/json'},
+    );
+    final token = await getToken();
+    if (token != null) {
+      activeHeaders['Authorization'] = 'Bearer $token';
+    }
+    return activeHeaders;
+  }
+
+  Future<http.Response> get(String endpoint, {Map<String, String>? headers}) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final activeHeaders = await _buildHeaders(headers: headers);
+    return _client.get(url, headers: activeHeaders).timeout(const Duration(seconds: 15));
+  }
+
   Future<http.Response> post(String endpoint, {Map<String, String>? headers, Object? body}) async {
     final url = Uri.parse('$baseUrl$endpoint');
     debugPrint('[ApiClient] POST $url');
     debugPrint('[ApiClient] body: $body');
 
-    final activeHeaders = Map<String, String>.from(
-      headers ?? {'Content-Type': 'application/json'},
-    );
-
-    final token = await getToken();
-    if (token != null) {
-      activeHeaders['Authorization'] = 'Bearer $token';
-      debugPrint('[ApiClient] Authorization header attached');
-    } else {
-      debugPrint('[ApiClient] No token available');
-    }
+    final activeHeaders = await _buildHeaders(headers: headers);
 
     debugPrint('[ApiClient] headers: ${activeHeaders.toString()}');
 
@@ -61,5 +68,29 @@ class ApiClient {
       debugPrint('[ApiClient] NETWORK ERROR: $e');
       rethrow;
     }
+  }
+
+  Future<http.Response> patch(String endpoint, {Map<String, String>? headers, Object? body}) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    debugPrint('[ApiClient] PATCH $url');
+    
+    final activeHeaders = await _buildHeaders(headers: headers);
+
+    try {
+      final response = await _client
+          .patch(url, headers: activeHeaders, body: body)
+          .timeout(const Duration(seconds: 15));
+      debugPrint('[ApiClient] PATCH response status: ${response.statusCode}');
+      return response;
+    } catch (e) {
+      debugPrint('[ApiClient] NETWORK ERROR (PATCH): $e');
+      rethrow;
+    }
+  }
+
+  Future<http.Response> delete(String endpoint, {Map<String, String>? headers}) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final activeHeaders = await _buildHeaders(headers: headers);
+    return _client.delete(url, headers: activeHeaders).timeout(const Duration(seconds: 15));
   }
 }

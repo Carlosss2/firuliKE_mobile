@@ -9,26 +9,35 @@ class PetRepositoryImpl implements PetRepository {
 
   @override
   Future<List<PetEntity>> getAllPets() async {
-    try {
-      final models = await remoteDataSource.fetchPets();
-      // Retornamos la lista mapeada hacia entidades limpias de dominio
-      return models;
-    } catch (e) {
-      rethrow;
-    }
+    return remoteDataSource.fetchPets();
   }
 
   @override
-  Future<bool> createPet(String name, String type, String breed, int age) async {
-    try {
-      return await remoteDataSource.storePet({
-        'name': name,
-        'type': type,
-        'breed': breed,
-        'age': age,
-      });
-    } catch (e) {
-      rethrow;
-    }
+  Future<PetEntity> createPet(String name, String breed, int age, double peso, String proximaCita, String contactoDueno) async {
+    return remoteDataSource.createPet({
+      'nombre': name,
+      'raza': breed,
+      'edad': age,
+      'peso': peso,
+      'proxima_cita': proximaCita,
+      'contacto_dueno': contactoDueno,
+    });
+  }
+
+  @override
+  Future<PetEntity> updatePet(int id, String name, String breed, int age, double peso, String proximaCita, String contactoDueno) async {
+    return remoteDataSource.updatePet(id, {
+      'nombre': name,
+      'raza': breed,
+      'edad': age,
+      'peso': peso,
+      'proxima_cita': proximaCita,
+      'contacto_dueno': contactoDueno,
+    });
+  }
+
+  @override
+  Future<bool> deletePet(int id) async {
+    return remoteDataSource.deletePet(id);
   }
 }

@@ -8,14 +8,8 @@ class PetsRemoteDataSource {
   PetsRemoteDataSource({required this.apiClient});
 
   Future<List<PetModel>> fetchPets() async {
-    // Nota: Si tu ApiClient aún no tiene implementado el método .get(), 
-    // puedes usar: await apiClient.post('/pets/findAll') o el mapeo correspondiente de tu NestJS.
-    // Aquí consumimos un GET limpio a tu endpoint de NestJS:
-    final url = Uri.parse('${apiClient.baseUrl}/pets');
-    
-    // Hacemos la consulta directamente usando la librería http mediante una llamada limpia
-    final response = await apiClient.post('/pets'); // Ajusta a tu endpoint exacto (ej. /pets)
-    
+    final response = await apiClient.get('/pets');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       final List<dynamic> decodedList = jsonDecode(response.body);
       return decodedList.map((item) => PetModel.fromJson(item)).toList();
@@ -24,8 +18,32 @@ class PetsRemoteDataSource {
     }
   }
 
-  Future<bool> storePet(Map<String, dynamic> body) async {
+  Future<PetModel> createPet(Map<String, dynamic> body) async {
     final response = await apiClient.post('/pets', body: jsonEncode(body));
-    return response.statusCode == 201 || response.statusCode == 200;
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      final Map<String, dynamic> decoded = jsonDecode(response.body);
+      return PetModel.fromJson(decoded);
+    } else {
+      final errorData = jsonDecode(response.body);
+      throw Exception(errorData['message'] ?? 'Error al crear la mascota');
+    }
+  }
+
+  Future<PetModel> updatePet(int id, Map<String, dynamic> body) async {
+    final response = await apiClient.patch('/pets/$id', body: jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> decoded = jsonDecode(response.body);
+      return PetModel.fromJson(decoded);
+    } else {
+      final errorData = jsonDecode(response.body);
+      throw Exception(errorData['message'] ?? 'Error al actualizar la mascota');
+    }
+  }
+
+  Future<bool> deletePet(int id) async {
+    final response = await apiClient.delete('/pets/$id');
+    return response.statusCode == 200 || response.statusCode == 204;
   }
 }

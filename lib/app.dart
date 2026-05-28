@@ -19,7 +19,10 @@ import 'features/auth/presentation/pages/login_page.dart';
 
 import 'features/home/data/datasources/remote/pets_remote_datasource.dart';
 import 'features/home/data/repositories/pet_repository_impl.dart';
+import 'features/home/domain/usecases/create_pet_usecase.dart';
+import 'features/home/domain/usecases/delete_pet_usecase.dart';
 import 'features/home/domain/usecases/get_pets_usecase.dart';
+import 'features/home/domain/usecases/update_pet_usecase.dart';
 import 'features/home/presentation/provider/pets_provider.dart';
 
 class MyApp extends StatelessWidget {
@@ -43,13 +46,16 @@ class MyApp extends StatelessWidget {
     final petsRemoteDataSource = PetsRemoteDataSource(apiClient: apiClient);
     final petsRepository = PetRepositoryImpl(petsRemoteDataSource);
     final getPetsUseCase = GetPetsUseCase(petsRepository);
+    final createPetUseCase = CreatePetUseCase(petsRepository);
+    final updatePetUseCase = UpdatePetUseCase(petsRepository);
+    final deletePetUseCase = DeletePetUseCase(petsRepository);
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<LoginProvider>(create: (_) => LoginProvider(loginUseCase)),
         ChangeNotifierProvider<RegisterProvider>(create: (_) => RegisterProvider(registerUseCase)),
         
-        ChangeNotifierProvider<PetsProvider>(create: (_) => PetsProvider(getPetsUseCase)),
+        ChangeNotifierProvider<PetsProvider>(create: (_) => PetsProvider(getPetsUseCase, createPetUseCase, updatePetUseCase, deletePetUseCase)),
       ],
       child: MaterialApp(
         title: 'FiruliKE API Client',
