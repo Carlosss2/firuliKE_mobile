@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/login_provider.dart';
 
+import '../../../home/presentation/pages/home_page.dart'; 
+
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
 
@@ -59,10 +61,17 @@ class LoginForm extends StatelessWidget {
                 ? null 
                 : () async {
                     final success = await provider.login();
+                    
                     if (success && context.mounted) {
-                      // Simulación de navegación exitosa con Navegación 1.0
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('¡Login Exitoso!')),
+                      );
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomePage(),
+                        ),
                       );
                     }
                   },

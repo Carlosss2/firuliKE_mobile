@@ -20,7 +20,10 @@ class LoginProvider extends ChangeNotifier {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
+    debugPrint('[LoginProvider] login() called with email: $email');
+
     if (email.isEmpty || password.isEmpty) {
+      debugPrint('[LoginProvider] validation failed: empty fields');
       _errorMessage = "Por favor, completa todos los campos.";
       notifyListeners();
       return false;
@@ -31,11 +34,14 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
+      debugPrint('[LoginProvider] calling LoginUseCase.execute()...');
       final success = await _loginUseCase.execute(email, password);
+      debugPrint('[LoginProvider] LoginUseCase returned: $success');
       _isLoading = false;
       notifyListeners();
       return success;
     } catch (e) {
+      debugPrint('[LoginProvider] ERROR caught: $e');
       _isLoading = false;
       _errorMessage = e.toString().replaceAll('Exception: ', '');
       notifyListeners();
