@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../pages/register_page.dart';
-class LoginFooter extends StatelessWidget {
-  const LoginFooter({super.key});
+
+class RegisterFooter extends StatelessWidget {
+  const RegisterFooter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class LoginFooter extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
           child: Row(
             children: [
               Expanded(child: Divider(color: theme.colorScheme.outlineVariant)),
@@ -22,16 +22,11 @@ class LoginFooter extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('¿No tienes cuenta? '),
+            const Text('¿Ya tienes cuenta? '),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterPage()),
-        );
-              },
+              onTap: () => Navigator.pop(context), // Regresa al Login de forma nativa
               child: Text(
-                'Registrarme',
+                'Iniciar sesion',
                 style: TextStyle(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -40,7 +35,7 @@ class LoginFooter extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
       ],
     );
   }

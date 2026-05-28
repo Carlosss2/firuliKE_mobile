@@ -19,4 +19,14 @@ class AuthRepositoryImpl implements AuthRepository {
       rethrow;
     }
   }
+  @override
+  Future<bool> register(String email, String password) async {
+    try {
+      final userModel = await remoteDataSource.register(email, password);
+      // Si el backend retorna un modelo con ID válido, el registro fue un éxito
+      return userModel.id > 0;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
