@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import '../storage/token_storage.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
@@ -9,34 +9,13 @@ class ApiClient {
 
   final http.Client _client = http.Client();
   final String baseUrl = 'http://3.208.235.57:3000';
-
-  static const _tokenKey = 'auth_token';
-  String? _token;
-
-  Future<String?> getToken() async {
-    if (_token != null) return _token;
-    final prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString(_tokenKey);
-    return _token;
-  }
-
-  Future<void> saveToken(String token) async {
-    _token = token;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, token);
-  }
-
-  Future<void> clearToken() async {
-    _token = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_tokenKey);
-  }
+  final TokenStorage _tokenStorage = TokenStorage();
 
   Future<Map<String, String>> _buildHeaders({Map<String, String>? headers}) async {
     final activeHeaders = Map<String, String>.from(
       headers ?? {'Content-Type': 'application/json'},
     );
-    final token = await getToken();
+    final token = await _tokenStorage.getToken();
     if (token != null) {
       activeHeaders['Authorization'] = 'Bearer $token';
     }

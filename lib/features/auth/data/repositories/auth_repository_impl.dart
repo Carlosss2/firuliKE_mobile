@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../../../../core/network/api_client.dart';
+import '../../../../core/storage/token_storage.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/remote/auth_remote_datasource.dart';
 
@@ -15,7 +15,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final responseModel = await remoteDataSource.login(email, password);
       debugPrint('[AuthRepositoryImpl] token received: ${responseModel.token.isNotEmpty ? "yes (${responseModel.token.length} chars)" : "EMPTY"}');
       if (responseModel.token.isNotEmpty) {
-        await ApiClient().saveToken(responseModel.token);
+        await TokenStorage().saveToken(responseModel.token);
         debugPrint('[AuthRepositoryImpl] token saved successfully');
         return true;
       }

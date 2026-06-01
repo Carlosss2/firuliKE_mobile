@@ -27,9 +27,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: homeDI.petsProvider),
       ],
       child: MaterialApp(
-        title: 'FiruliKE API Client',
+        title: 'FiruliKE',
         debugShowCheckedModeBanner: false,
         theme: materialTheme.light(),
+        darkTheme: materialTheme.dark(),
+        themeMode: ThemeMode.system,
         home: const LoginPage(),
       ),
     );
