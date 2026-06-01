@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../provider/register_provider.dart';
+import '../../../../core/router/app_router.dart';
 
 class RegisterForm extends StatelessWidget {
-  const RegisterForm({super.key});
+  final RegisterProvider provider;
+  const RegisterForm({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<RegisterProvider>();
     final theme = Theme.of(context);
 
     return Padding(
@@ -25,6 +26,7 @@ class RegisterForm extends StatelessWidget {
           const SizedBox(height: 24),
           
           _buildCardTextField(
+            theme: theme,
             controller: provider.emailController,
             hintText: 'Correo electronico',
             icon: Icons.mail_outline,
@@ -33,6 +35,7 @@ class RegisterForm extends StatelessWidget {
           const SizedBox(height: 16),
           
           _buildCardTextField(
+            theme: theme,
             controller: provider.passwordController,
             hintText: 'Contraseña',
             icon: Icons.lock_outline,
@@ -41,6 +44,7 @@ class RegisterForm extends StatelessWidget {
           const SizedBox(height: 16),
 
           _buildCardTextField(
+            theme: theme,
             controller: provider.confirmPasswordController,
             hintText: 'Confirmar contraseña',
             icon: Icons.lock_reset_outlined,
@@ -51,7 +55,7 @@ class RegisterForm extends StatelessWidget {
           if (provider.errorMessage != null) ...[
             Text(
               provider.errorMessage!,
-              style: TextStyle(color: theme.colorScheme.error, fontWeight: FontWeight.w500),
+              style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
           ],
@@ -68,7 +72,7 @@ class RegisterForm extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('¡Usuario creado correctamente! Inicia sesión.')),
                       );
-                      Navigator.pop(context); // Regresa al Login usando Navegación 1.0
+                      context.go(AppRouter.login);
                     }
                   },
               style: FilledButton.styleFrom(
@@ -76,7 +80,7 @@ class RegisterForm extends StatelessWidget {
               ),
               child: provider.isLoading
                 ? CircularProgressIndicator(color: theme.colorScheme.onPrimary)
-                : const Text('Registrarme', style: TextStyle(fontSize: 18)),
+                : Text('Registrarme', style: theme.textTheme.titleMedium?.copyWith(fontSize: 18)),
             ),
           ),
         ],
@@ -85,6 +89,7 @@ class RegisterForm extends StatelessWidget {
   }
 
   Widget _buildCardTextField({
+    required ThemeData theme,
     required TextEditingController controller,
     required String hintText,
     required IconData icon,
@@ -93,7 +98,7 @@ class RegisterForm extends StatelessWidget {
   }) {
     return Card(
       elevation: 4,
-      shadowColor: Colors.black26,
+      shadowColor: theme.colorScheme.shadow.withValues(alpha: 0.26),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

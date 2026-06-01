@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../domain/entities/pet_entity.dart';
 import '../provider/pets_provider.dart';
 import 'pet_modal_helper.dart';
 
 class PetsListSection extends StatelessWidget {
-  const PetsListSection({super.key});
+  final PetsProvider provider;
+  const PetsListSection({super.key, required this.provider});
 
   Future<bool> _confirmDelete(BuildContext context, PetEntity pet) async {
     return await showDialog<bool>(
@@ -23,7 +23,6 @@ class PetsListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<PetsProvider>();
     final theme = Theme.of(context);
 
     return Padding(
@@ -47,7 +46,7 @@ class PetsListSection extends StatelessWidget {
           if (provider.isLoading)
             const Center(child: Padding(padding: EdgeInsets.all(24), child: CircularProgressIndicator()))
           else if (provider.error != null)
-            Center(child: Text(provider.error!, style: TextStyle(color: theme.colorScheme.error)))
+            Center(child: Text(provider.error!, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error)))
           else if (provider.pets.isEmpty)
             _buildPlaceholderCard(theme, 'Aún no tienes mascotas registradas')
           else
@@ -94,14 +93,14 @@ class PetsListSection extends StatelessWidget {
                               children: [
                                   IconButton(
                                     icon: Icon(Icons.edit_outlined, color: theme.colorScheme.primary),
-                                    onPressed: () => showPetFormModal(context, pet: pet),
+                                    onPressed: () => showPetFormModal(context, provider, pet: pet),
                                   ),
                                 IconButton(
                                   icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
                                   onPressed: () async {
                                     final confirm = await _confirmDelete(context, pet);
                                     if (confirm && context.mounted) {
-                                      await context.read<PetsProvider>().deletePet(pet.id);
+                                      await provider.deletePet(pet.id);
                                     }
                                   },
                                 ),

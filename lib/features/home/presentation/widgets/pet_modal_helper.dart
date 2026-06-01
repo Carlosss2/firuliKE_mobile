@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../domain/entities/pet_entity.dart';
 import '../provider/pets_provider.dart';
 import 'pet_form_modal.dart';
 
-void showPetFormModal(BuildContext context, {PetEntity? pet}) {
-  final provider = context.read<PetsProvider>();
+void showPetFormModal(BuildContext context, PetsProvider provider, {PetEntity? pet}) {
 
   showModalBottomSheet(
     context: context,

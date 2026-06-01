@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
 
 class RegisterFooter extends StatelessWidget {
   const RegisterFooter({super.key});
@@ -24,10 +26,10 @@ class RegisterFooter extends StatelessWidget {
           children: [
             const Text('¿Ya tienes cuenta? '),
             GestureDetector(
-              onTap: () => Navigator.pop(context), // Regresa al Login de forma nativa
+              onTap: () => context.go(AppRouter.login),
               child: Text(
                 'Iniciar sesion',
-                style: TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../pages/register_page.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
+
 class LoginFooter extends StatelessWidget {
   const LoginFooter({super.key});
 
@@ -24,15 +26,10 @@ class LoginFooter extends StatelessWidget {
           children: [
             const Text('¿No tienes cuenta? '),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisterPage()),
-        );
-              },
+              onTap: () => context.go(AppRouter.register),
               child: Text(
                 'Registrarme',
-                style: TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.bold,
                 ),

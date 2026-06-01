@@ -42,7 +42,7 @@ class CustomHeader extends StatelessWidget {
               Expanded(
                 child: Card(
                   elevation: 0, // Material 3 usa tonalidades en lugar de sombras pesadas
-                  color: theme.colorScheme.surfaceContainerHigh, // 🎨 Fondo adaptativo para inputs
+                  color: theme.colorScheme.surfaceContainerHigh, 
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -51,7 +51,7 @@ class CustomHeader extends StatelessWidget {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Buscar a una mascota',
-                        hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7)),
+                        hintStyle: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
                         prefixIcon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
                         prefixIconConstraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                       ),

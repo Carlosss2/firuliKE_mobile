@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'shared/theme/theme.dart';
 import 'shared/theme/util.dart';
 import 'core/di/app_container.dart';
+import 'core/router/app_router.dart';
 import 'features/auth/di/auth_di.dart';
 import 'features/home/di/home_di.dart';
-import 'features/auth/presentation/pages/login_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,13 +26,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: authDI.registerProvider),
         ChangeNotifierProvider.value(value: homeDI.petsProvider),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'FiruliKE',
         debugShowCheckedModeBanner: false,
         theme: materialTheme.light(),
         darkTheme: materialTheme.dark(),
         themeMode: ThemeMode.system,
-        home: const LoginPage(),
+        routerConfig: AppRouter.router,
       ),
     );
   }

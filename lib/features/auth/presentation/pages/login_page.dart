@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/login_provider.dart';
 import '../widgets/login_header.dart';
 import '../widgets/login_form.dart';
 import '../widgets/login_footer.dart';
@@ -9,7 +11,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final provider = context.watch<LoginProvider>();
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SingleChildScrollView(
@@ -17,7 +19,7 @@ class LoginPage extends StatelessWidget {
           children: [
             const LoginHeader(),
             Transform.translate(
-              offset: const Offset(0, -30), 
+              offset: const Offset(0, -30),
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
@@ -26,10 +28,10 @@ class LoginPage extends StatelessWidget {
                     topRight: Radius.circular(32),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
-                    LoginForm(),
-                    LoginFooter(),
+                    LoginForm(provider: provider),
+                    const LoginFooter(),
                   ],
                 ),
               ),

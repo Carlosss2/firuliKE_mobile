@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../shared/components/custom_header.dart';
-import '../../../../shared/components/custom_navbar.dart';
+import '../../../../shared/widgets/custom_header.dart';
+import '../../../../shared/widgets/custom_navbar.dart';
 import '../provider/pets_provider.dart';
 import '../widgets/appointments_section.dart';
 import '../widgets/pet_modal_helper.dart';
@@ -35,15 +35,15 @@ class _HomePageState extends State<HomePage> {
           children: [
             CustomHeader(
               onSearchChanged: (query) {},
-              onAddPressed: () => showPetFormModal(context),
+              onAddPressed: () => showPetFormModal(context, provider),
             ),
-            const Expanded(
+            Expanded(
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    AppointmentsSection(),
-                    PetsListSection(),
+                    const AppointmentsSection(),
+                    PetsListSection(provider: provider),
                   ],
                 ),
               ),

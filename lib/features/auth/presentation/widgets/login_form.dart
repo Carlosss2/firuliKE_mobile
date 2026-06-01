@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../provider/login_provider.dart';
-
-import '../../../home/presentation/pages/home_page.dart'; 
+import '../../../../core/router/app_router.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+  final LoginProvider provider;
+  const LoginForm({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<LoginProvider>();
     final theme = Theme.of(context);
 
     return Padding(
@@ -28,6 +27,7 @@ class LoginForm extends StatelessWidget {
           
           // Input Correo
           _buildCardTextField(
+            theme: theme,
             controller: provider.emailController,
             hintText: 'Correo electronico',
             icon: Icons.mail_outline,
@@ -37,6 +37,7 @@ class LoginForm extends StatelessWidget {
           
           // Input Contraseña
           _buildCardTextField(
+            theme: theme,
             controller: provider.passwordController,
             hintText: 'Contraseña',
             icon: Icons.lock_outline,
@@ -47,7 +48,7 @@ class LoginForm extends StatelessWidget {
           if (provider.errorMessage != null) ...[
             Text(
               provider.errorMessage!,
-              style: TextStyle(color: theme.colorScheme.error),
+              style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error),
             ),
             const SizedBox(height: 16),
           ],
@@ -67,12 +68,7 @@ class LoginForm extends StatelessWidget {
                         const SnackBar(content: Text('¡Login Exitoso!')),
                       );
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
+                      context.go(AppRouter.home);
                     }
                   },
               style: FilledButton.styleFrom(
@@ -82,7 +78,7 @@ class LoginForm extends StatelessWidget {
               ),
               child: provider.isLoading
                 ? CircularProgressIndicator(color: theme.colorScheme.onPrimary)
-                : const Text('Inicio de sesion', style: TextStyle(fontSize: 18)),
+                : Text('Inicio de sesion', style: theme.textTheme.titleMedium?.copyWith(fontSize: 18)),
             ),
           ),
         ],
@@ -91,6 +87,7 @@ class LoginForm extends StatelessWidget {
   }
 
   Widget _buildCardTextField({
+    required ThemeData theme,
     required TextEditingController controller,
     required String hintText,
     required IconData icon,
@@ -99,7 +96,7 @@ class LoginForm extends StatelessWidget {
   }) {
     return Card(
       elevation: 4,
-      shadowColor: Colors.black26,
+      shadowColor: theme.colorScheme.shadow.withValues(alpha: 0.26),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
